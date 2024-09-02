@@ -17,6 +17,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserResource extends Resource
 {
@@ -24,7 +26,7 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form, $record = null): Form
+    public static function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -42,32 +44,22 @@ class UserResource extends Resource
                     ->readOnlyOn(['edit']),
                 TextInput::make('phone_number')
                     ->maxLength(20),
-                // FileUpload::make('profile_picture')
-                //     ->image()
-                //     ->acceptedFileTypes(['image/jpeg','image/png','image/jpg'])
-                //     ->maxSize(10240)
-                //     ->disk('profile')
-                //     ->directory(function () use ($record) {
-                //         return 'profile_photos/' . ($record ? $record->id : 'temp');
-                //     }),
+                TextInput::make('password')
+                    ->password()
+                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->required(fn (string $context): bool => $context === 'create'),
                 Select::make('roles')
                     ->relationship('roles', 'name')
+                    ->required(),
+                // FileUpload::make('profile_picture')
+                //         ->image()
+                //         ->acceptedFileTypes(['image/jpeg','image/png','image/jpg'])
+                //         ->maxSize(10240)
+                //         ->preserveFilenames()
+                //         ->required(),
             ]);
     }
-
-    // protected static function afterSave($record)
-    // {
-    //     // Ensure the 'profile_picture' field is handled correctly
-    //     if (request()->hasFile('profile_picture')) {
-    //         $userId = $record->id; // Get the ID of the saved record
-    //         $file = request()->file('profile_picture');
-    //         $path = $file->store('profile_photos/' . $userId, 'profile');
-    //         // Update the record with the file path
-    //         $record->update([
-    //             'profile_picture' => $path,
-    //         ]);
-    //     }
-    // }
 
     public static function table(Table $table): Table
     {
