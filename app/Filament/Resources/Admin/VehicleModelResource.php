@@ -6,10 +6,13 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use App\Enums\Common\Status;
 use App\Models\VehicleModel;
 use Filament\Resources\Resource;
+use App\Services\Datatables\ListService;
 use Illuminate\Database\Eloquent\Builder;
+use App\Services\FormSchema\FormFieldService;
+use App\Services\Datatables\ListActionService;
+use App\Services\Datatables\ListFilterService;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Database\Eloquent\Factories\Relationship;
 use App\Filament\Resources\Admin\VehicleModelResource\Pages;
@@ -29,16 +32,9 @@ class VehicleModelResource extends Resource
             ->schema([
                 Forms\Components\Grid::make()
                     ->schema([
-                        Forms\Components\Select::make('company_id')
-                            ->label('Company')
-                            ->relationship(name: 'company', titleAttribute: 'company_name')
-                            ->required(),
-                        Forms\Components\TextInput::make('model_name')
-                            ->label('Vehicle Model')
-                            ->required(),
-                        Forms\Components\Select::make('status')
-                            ->label('Status')
-                            ->options(Status::class),
+                        FormFieldService::getCompanySelectField('company_id'),
+                        FormFieldService::getVehicleModelTextField(),
+                        FormFieldService::getStatusField(),
                     ])
                     ->columnSpan(12),
             ]);
@@ -48,33 +44,17 @@ class VehicleModelResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('company.company_name')
-                    ->label('Company Name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('model_name')
-                    ->label('Vehicle Model')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        Status::Active->name => 'success',
-                        Status::Inactive->name => 'warning',
-                    }),
+                ListService::getCompanyNameDisplay('company.company_name'),
+                ListService::getVehicleModelDisplay('model_name'),
+                ListService::getStatusDisplay('status'),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('company_id')
-                    ->label('Company')
-                    ->relationship('company', 'company_name')
-                    ->multiple(),
-                Tables\Filters\SelectFilter::make('status')
-                    ->label('Status')
-                    ->options(Status::class),
+                ListFilterService::getCompanyFilter('company_id'),
+                ListFilterService::getStatusFilter(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label(''),
-                Tables\Actions\DeleteAction::make()
-                    ->label(''),
+                ListActionService::getEditAction(),
+                ListActionService::getDeleteAction(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -9,12 +9,14 @@ use App\Models\Vehicle;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Arr;
-use App\Enums\Common\Status;
 use App\Models\VehicleModel;
 use Filament\Resources\Resource;
 use App\Enums\Vehicle\VehicleType;
-use App\Traits\Vehicle\FormFieldTrait;
+use App\Services\Datatables\ListService;
 use Illuminate\Database\Eloquent\Builder;
+use App\Services\FormSchema\FormFieldService;
+use App\Services\Datatables\ListActionService;
+use App\Services\Datatables\ListFilterService;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\Admin\VehicleResource\Pages;
 use App\Filament\Resources\Admin\VehicleResource\RelationManagers;
@@ -41,8 +43,8 @@ class VehicleResource extends Resource
                     ->columnSpan(12),
                 Forms\Components\Grid::make()
                     ->schema([
-                        FormFieldTrait::getCompanySelectField(true),
-                        FormFieldTrait::getVehicleModelField(true),
+                        FormFieldService::getCompanySelectField('company_id', true, true),
+                        FormFieldService::getVehicleModelSelectField('vehicle_model_id', true, true),
                     ])
                     ->columnSpan(12),
                 Forms\Components\Grid::make()
@@ -51,13 +53,12 @@ class VehicleResource extends Resource
                             ->label('Vehicle Type')
                             ->hint('Scooter contains "Bike" as well')
                             ->hintIcon('heroicon-m-information-circle')
-                            ->options(VehicleType::class),
+                            ->options(VehicleType::class)
+                            ->default(VehicleType::Scooter->value),
                         Forms\Components\TextInput::make('vehicle_number')
                             ->label('Vehicle Number')
                             ->required(),
-                        Forms\Components\Select::make('status')
-                            ->label('Status')
-                            ->options(Status::class),
+                        FormFieldService::getStatusField(),
                     ])
                     ->columnSpan(12),
             ]);
@@ -70,24 +71,16 @@ class VehicleResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('User')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('company.company_name')
-                    ->label('Company')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('vehicle_model.model_name')
-                    ->label('Vehicle Model')
-                    ->searchable(),
+                ListService::getCompanyNameDisplay('company.company_name'),
+                ListService::getVehicleModelDisplay('vehicleModel.model_name'),
                 Tables\Columns\TextColumn::make('vehicle_type')
                     ->label('Vehicle Type')
+                    ->formatStateUsing(fn(VehicleType $state): string => $state->getLabel())
                     ->searchable(),
                 Tables\Columns\TextColumn::make('vehicle_number')
                     ->label('Vehicle number')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        Status::Active->name => 'success',
-                        Status::Inactive->name => 'warning',
-                    }),
+                ListService::getStatusDisplay('status'),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('user_id')
@@ -101,8 +94,8 @@ class VehicleResource extends Resource
                     ->form([
                         Forms\Components\Grid::make()
                             ->schema([
-                                FormFieldTrait::getCompanySelectField(false, true),
-                                FormFieldTrait::getVehicleModelField(false, true),
+                                FormFieldService::getCompanySelectField('company_id', true, false, true),
+                                FormFieldService::getVehicleModelSelectField('vehicle_model_id', false, false, true),
                             ])
                             ->columnSpan(12),
                     ])
@@ -135,16 +128,12 @@ class VehicleResource extends Resource
                         }
                     })
                     ->columnSpan(2),
-                Tables\Filters\SelectFilter::make('status')
-                    ->label('Status')
-                    ->options(Status::class),
+                ListFilterService::getStatusFilter(),
             ])
             ->filtersFormColumns(2)
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label(''),
-                Tables\Actions\DeleteAction::make()
-                    ->label(''),
+                ListActionService::getEditAction(),
+                ListActionService::getDeleteAction(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

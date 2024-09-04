@@ -2,9 +2,17 @@
 
 namespace App\Enums\Vehicle;
 
-enum VehicleType: string
+enum VehicleType: int
 {
-    case Scooter = 'Scooter';
+    case Scooter = 0;
 
-    case Car = 'Car';
+    case Car = 1;
+
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::Scooter => 'Scooter',
+            self::Car => 'Car',
+        };
+    }
 }

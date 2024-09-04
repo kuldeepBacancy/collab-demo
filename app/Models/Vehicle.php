@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Common\Status;
+use App\Enums\Vehicle\VehicleType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,6 +45,11 @@ class Vehicle extends Model
         'updated_at',
     ];
 
+    protected $casts = [
+        'status' => Status::class,
+        'vehicle_type' => VehicleType::class,
+    ];
+
 
     /* Foreign Refs */
     public function user(): BelongsTo
@@ -52,12 +59,12 @@ class Vehicle extends Model
 
     public function company(): BelongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class)->status(Status::Active->value);
     }
 
     public function vehicleModel(): BelongsTo
     {
-        return $this->belongsTo(VehicleModel::class);
+        return $this->belongsTo(VehicleModel::class)->status(Status::Active->value);
     }
 
 
