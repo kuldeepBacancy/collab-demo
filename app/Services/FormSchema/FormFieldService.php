@@ -6,12 +6,15 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use App\Enums\Common\Status;
 use App\Models\VehicleModel;
-use Filament\Forms\Components\Actions\Action;
+use Illuminate\Validation\Rule;
+use App\Enums\Vehicle\VehicleType;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Actions\Action;
 
 class FormFieldService
 {
+    /* Common fields - start */
     /* Status field */
     public static function getStatusField()
     {
@@ -21,14 +24,43 @@ class FormFieldService
             ->default(Status::Active->value);
     }
 
-    /* Company fields - start */
-    public static function getCompanyTextField()
+    /* Common text field */
+    public static function getTextField($column, $label = '', $maxLength = 0, $unique = false, $required = false)
     {
-        return TextInput::make('company_name')
-            ->label('Company Name')
-            ->required();
+        $textField = TextInput::make($column)
+            ->label($label);
+
+        if ($maxLength != 0) {
+            $textField->maxLength($maxLength)->rule(['max: ' . $maxLength]);
+        }
+
+        if ($unique) {
+            $textField->unique(ignoreRecord: true);
+        }
+
+        if ($required) {
+            $textField->required();
+        }
+
+        return $textField;
     }
 
+    public static function getUserSelectField($column, $label, $relationShip, $required = false)
+    {
+        $selectField = Select::make($column)
+            ->label($label)
+            ->relationship(name: $relationShip, titleAttribute: 'name');
+
+        if ($required) {
+            $selectField->required();
+        }
+
+        return $selectField;
+    }
+
+    /* Common fields - end */
+
+    /* Company select field */
     public static function getCompanySelectField($column, $dependentField = false, $required = false, $multiple = false)
     {
         $selectField = Select::make($column)
@@ -49,16 +81,8 @@ class FormFieldService
         }
         return $selectField;
     }
-    /* Company fields - end */
 
-    /* Vehicle model fields - start */
-    public static function getVehicleModelTextField()
-    {
-        return TextInput::make('model_name')
-            ->label('Vehicle Model')
-            ->required();
-    }
-
+    /* Vehicle model select field */
     public static function getVehicleModelSelectField($column, $addOption = false, $required = false, $multiple = false)
     {
         $selectField = Select::make($column)
@@ -80,7 +104,7 @@ class FormFieldService
         if ($addOption) {
             $selectField->createOptionForm([
                 self::getCompanySelectField('company_id', false, true),
-                self::getVehicleModelTextField(),
+                self::getTextField('model_name', 'Vehicle Model', 100, true, true),
                 self::getStatusField(),
             ])
                 ->preload();
@@ -95,5 +119,16 @@ class FormFieldService
         }
         return $selectField;
     }
-    /* Vehicle model fields - end */
+
+
+    /* Vehicle type field */
+    public static function getVehicleTypeField()
+    {
+        return Select::make('vehicle_type')
+            ->label('Vehicle Type')
+            ->hint('Scooter contains "Bike" as well')
+            ->hintIcon('heroicon-m-information-circle')
+            ->options(VehicleType::class)
+            ->default(VehicleType::Scooter->value);
+    }
 }

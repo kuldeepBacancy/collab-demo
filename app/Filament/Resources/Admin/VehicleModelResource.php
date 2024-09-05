@@ -33,7 +33,7 @@ class VehicleModelResource extends Resource
                 Forms\Components\Grid::make()
                     ->schema([
                         FormFieldService::getCompanySelectField('company_id'),
-                        FormFieldService::getVehicleModelTextField(),
+                        FormFieldService::getTextField('model_name', 'Vehicle Model', 100, true, true),
                         FormFieldService::getStatusField(),
                     ])
                     ->columnSpan(12),
@@ -44,8 +44,8 @@ class VehicleModelResource extends Resource
     {
         return $table
             ->columns([
-                ListService::getCompanyNameDisplay('company.company_name'),
-                ListService::getVehicleModelDisplay('model_name'),
+                ListService::getCommonTextColumn('company.company_name', 'Company'),
+                ListService::getCommonTextColumn('model_name', 'Vehicle Model'),
                 ListService::getStatusDisplay('status'),
             ])
             ->filters([

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Admin;
 
+use App\Enums\Common\Status;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Company;
@@ -16,6 +17,8 @@ use App\Services\Datatables\ListFilterService;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\Admin\CompanyResource\Pages;
 use App\Filament\Resources\Admin\CompanyResource\RelationManagers;
+use Filament\Notifications\Notification;
+use Filament\Tables\Columns\ToggleColumn;
 
 class CompanyResource extends Resource
 {
@@ -31,7 +34,7 @@ class CompanyResource extends Resource
             ->schema([
                 Forms\Components\Grid::make()
                     ->schema([
-                        FormFieldService::getCompanyTextField(),
+                        FormFieldService::getTextField('company_name', 'Company', 100, true, true),
                         FormFieldService::getStatusField(),
                     ])
                     ->columnSpan(12),
@@ -42,7 +45,7 @@ class CompanyResource extends Resource
     {
         return $table
             ->columns([
-                ListService::getCompanyNameDisplay('company_name'),
+                ListService::getCommonTextColumn('company_name', 'Company'),
                 ListService::getStatusDisplay('status'),
             ])
             ->filters([
