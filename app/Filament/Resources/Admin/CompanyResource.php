@@ -7,9 +7,12 @@ use Filament\Tables;
 use App\Models\Company;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use App\Enums\Common\Status;
 use Filament\Resources\Resource;
+use App\Services\Datatables\ListService;
 use Illuminate\Database\Eloquent\Builder;
+use App\Services\FormSchema\FormFieldService;
+use App\Services\Datatables\ListActionService;
+use App\Services\Datatables\ListFilterService;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\Admin\CompanyResource\Pages;
 use App\Filament\Resources\Admin\CompanyResource\RelationManagers;
@@ -28,12 +31,8 @@ class CompanyResource extends Resource
             ->schema([
                 Forms\Components\Grid::make()
                     ->schema([
-                        Forms\Components\TextInput::make('company_name')
-                            ->label('Company Name')
-                            ->required(),
-                        Forms\Components\Select::make('status')
-                            ->label('Status')
-                            ->options(Status::class),
+                        FormFieldService::getCompanyTextField(),
+                        FormFieldService::getStatusField(),
                     ])
                     ->columnSpan(12),
             ]);
@@ -43,25 +42,15 @@ class CompanyResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('company_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        Status::Active->name => 'success',
-                        Status::Inactive->name => 'warning',
-                    }),
+                ListService::getCompanyNameDisplay('company_name'),
+                ListService::getStatusDisplay('status'),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
-                    ->label('Status')
-                    ->options(Status::class),
+                ListFilterService::getStatusFilter(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label(''),
-                Tables\Actions\DeleteAction::make()
-                    ->label(''),
+                ListActionService::getEditAction(),
+                ListActionService::getDeleteAction(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

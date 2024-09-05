@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Common\Status;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -39,11 +40,15 @@ class Company extends Model
         'updated_at',
     ];
 
+    protected $casts = [
+        'status' => Status::class,
+    ];
+
 
     /* Foreign Refs */
     public function vehicleModels(): HasMany
     {
-        return $this->hasMany(VehicleModel::class);
+        return $this->hasMany(VehicleModel::class)->status(Status::Active->value);
     }
 
     public function vehicles(): HasMany

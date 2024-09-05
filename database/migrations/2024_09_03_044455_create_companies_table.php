@@ -1,6 +1,8 @@
 <?php
 
-use Exception;
+use App\Enums\Common\Status;
+use App\Enums\Vehicle\VehicleType;
+use PHPUnit\Logging\Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -19,7 +21,7 @@ return new class extends Migration
                     $table->id();
 
                     $table->string('company_name', 100)->unique()->nullable()->index();
-                    $table->enum('status', ['Active', 'Inactive'])->default('Active');
+                    $table->boolean('status')->default(Status::Active->value)->comment(Status::Inactive->value . ' => Inactive, ' . Status::Active->value . ' => Active');
 
                     $table->softDeletes();
                     $table->timestamps();
@@ -34,7 +36,7 @@ return new class extends Migration
                     $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
                     $table->string('model_name', 100)->unique()->nullable()->index();
-                    $table->enum('status', ['Active', 'Inactive'])->default('Active');
+                    $table->boolean('status')->default(Status::Active->value)->comment(Status::Inactive->value . ' => Inactive, ' . Status::Active->value . ' => Active');
 
                     $table->softDeletes();
                     $table->timestamps();
@@ -54,9 +56,9 @@ return new class extends Migration
                     $table->unsignedBigInteger('vehicle_model_id')->nullable();
                     $table->foreign('vehicle_model_id')->references('id')->on('vehicle_models')->onDelete('cascade');
 
-                    $table->enum('vehicle_type', ['Car', 'Scooter'])->default('Scooter');
+                    $table->boolean('vehicle_type')->default(VehicleType::Scooter->value)->comment(VehicleType::Scooter->value . ' => Scooter, ' . VehicleType::Car->value . ' => Car');
                     $table->string('vehicle_number', 20)->unique()->nullable()->index();
-                    $table->enum('status', ['Active', 'Inactive'])->default('Active');
+                    $table->boolean('status')->default(Status::Active->value)->comment(Status::Inactive->value . ' => Inactive, ' . Status::Active->value . ' => Active');
 
                     $table->softDeletes();
                     $table->timestamps();
