@@ -46,8 +46,8 @@ return [
 
         'profile' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/profile_photos'),
-            'url' => env('APP_URL').'/storage/profile_photos',
+            'root' => storage_path('app/public/admin/profile_photos'),
+            'url' => env('APP_URL').'/storage/admin/profile_photos',
             'visibility' => 'public',
             'throw' => false,
         ],

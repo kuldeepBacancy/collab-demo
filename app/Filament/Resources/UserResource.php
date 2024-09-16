@@ -19,12 +19,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationGroup = 'Roles and Permissions';
 
     public static function form(Form $form): Form
     {
@@ -46,18 +49,15 @@ class UserResource extends Resource
                     ->maxLength(20),
                 TextInput::make('password')
                     ->password()
-                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create'),
                 Select::make('roles')
                     ->relationship('roles', 'name')
                     ->required(),
-                // FileUpload::make('profile_picture')
-                //         ->image()
-                //         ->acceptedFileTypes(['image/jpeg','image/png','image/jpg'])
-                //         ->maxSize(10240)
-                //         ->preserveFilenames()
-                //         ->required(),
+                FileUpload::make('avatar_url')
+                    ->image()
+                    ->acceptedFileTypes(['image/jpeg','image/png','image/jpg'])
+                    ->disk('profile'),
             ]);
     }
 
@@ -70,7 +70,7 @@ class UserResource extends Resource
                 TextColumn::make('email'),
                 TextColumn::make('roles.name'),
                 TextColumn::make('phone_number'),
-                // ImageColumn::make('profile_picture'),
+                ImageColumn::make('avatar_url')->disk('profile'),
             ])
             ->filters([
                 //

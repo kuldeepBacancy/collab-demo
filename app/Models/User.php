@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\HasName;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasName
@@ -15,35 +16,20 @@ class User extends Authenticatable implements HasName
     use Notifiable;
     use HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'firstname',
         'lastname',
         'email',
         'password',
-        'profile_picture',
+        'avatar_url',
         'phone_number'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -55,5 +41,11 @@ class User extends Authenticatable implements HasName
     public function getFilamentName(): string
     {
         return $this->firstname . ' ' . $this->lastname ?: 'Unknown User';
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        $user = auth()->user();
+        return asset('storage/admin/profile_photos/' . $user['avatar_url']);
     }
 }

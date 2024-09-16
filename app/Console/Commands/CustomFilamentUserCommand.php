@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class CustomFilamentUserCommand extends Command
 {
@@ -32,12 +34,17 @@ class CustomFilamentUserCommand extends Command
         $email = $this->ask('Email');
         $password = $this->secret('Password');
 
-        User::create([
+        $user = User::create([
             'firstname' => $firstname,
             'lastname' => $lastname,
             'email' => $email,
             'password' => Hash::make($password),
-        ]);
+            ]);
+
+        $role = Role::firstOrCreate(['name' => 'Super Admin']);
+        $permissions = Permission::all();
+        $role->syncPermissions($permissions);
+        $user->assignRole($role);
 
         $this->info('User created successfully!');
     }
