@@ -7,20 +7,15 @@ use Filament\Tables\Columns\TextColumn;
 
 class ListService
 {
-    public static function getCompanyNameDisplay($column)
+    /* Common text field */
+    public static function getCommonTextColumn($column, $label)
     {
         return TextColumn::make($column)
-            ->label('Company')
+            ->label($label)
             ->searchable();
     }
 
-    public static function getVehicleModelDisplay($column)
-    {
-        return TextColumn::make($column)
-            ->label('Vehicle Model')
-            ->searchable();
-    }
-
+    /* Common select field */
     public static function getStatusDisplay($column)
     {
         return TextColumn::make($column)

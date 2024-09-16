@@ -35,10 +35,7 @@ class VehicleResource extends Resource
             ->schema([
                 Forms\Components\Grid::make()
                     ->schema([
-                        Forms\Components\Select::make('user_id')
-                            ->label('User')
-                            ->relationship(name: 'user', titleAttribute: 'name')
-                            ->required(),
+                        FormFieldService::getUserSelectField('user_id', 'User', 'user', true),
                     ])
                     ->columnSpan(12),
                 Forms\Components\Grid::make()
@@ -49,15 +46,8 @@ class VehicleResource extends Resource
                     ->columnSpan(12),
                 Forms\Components\Grid::make()
                     ->schema([
-                        Forms\Components\Select::make('vehicle_type')
-                            ->label('Vehicle Type')
-                            ->hint('Scooter contains "Bike" as well')
-                            ->hintIcon('heroicon-m-information-circle')
-                            ->options(VehicleType::class)
-                            ->default(VehicleType::Scooter->value),
-                        Forms\Components\TextInput::make('vehicle_number')
-                            ->label('Vehicle Number')
-                            ->required(),
+                        FormFieldService::getVehicleTypeField(),
+                        FormFieldService::getTextField('vehicle_number', 'Vehicle Number', 20, true, true),
                         FormFieldService::getStatusField(),
                     ])
                     ->columnSpan(12),
@@ -68,18 +58,14 @@ class VehicleResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')
-                    ->label('User')
-                    ->searchable(),
-                ListService::getCompanyNameDisplay('company.company_name'),
-                ListService::getVehicleModelDisplay('vehicleModel.model_name'),
+                ListService::getCommonTextColumn('user.name', 'User'),
+                ListService::getCommonTextColumn('company.company_name', 'Company'),
+                ListService::getCommonTextColumn('vehicleModel.model_name', 'Vehicle Model'),
                 Tables\Columns\TextColumn::make('vehicle_type')
                     ->label('Vehicle Type')
                     ->formatStateUsing(fn(VehicleType $state): string => $state->getLabel())
                     ->searchable(),
-                Tables\Columns\TextColumn::make('vehicle_number')
-                    ->label('Vehicle number')
-                    ->searchable(),
+                ListService::getCommonTextColumn('vehicle_number', 'Vehicle Number'),
                 ListService::getStatusDisplay('status'),
             ])
             ->filters([
