@@ -31,7 +31,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'nav.group' => 'Roles and Permission',
+    'nav.group' => 'Filament Shield',
     'nav.role.label' => '角色',
     'nav.role.icon' => 'heroicon-o-shield-check',
     'resource.label.role' => '角色',

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Shield;
 
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use BezhanSalleh\FilamentShield\Facades\FilamentShield;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use BezhanSalleh\FilamentShield\Forms\ShieldSelectAllToggle;
-use App\Filament\Resources\RoleResource\Pages;
+use App\Filament\Resources\Shield\RoleResource\Pages;
 use BezhanSalleh\FilamentShield\Support\Utils;
 use Filament\Forms;
 use Filament\Forms\Components\Component;
@@ -18,11 +18,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
-class RoleResource extends Resource
+class RoleResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static ?string $navigationGroup = 'Roles and Permissions';
+
 
     public static function getPermissionPrefixes(): array
     {
@@ -249,13 +250,16 @@ class RoleResource extends Resource
 
     public static function setPermissionStateForRecordPermissions(Component $component, string $operation, array $permissions, ?Model $record): void
     {
+
         if (in_array($operation, ['edit', 'view'])) {
+
             if (blank($record)) {
                 return;
             }
             if ($component->isVisible() && count($permissions) > 0) {
                 $component->state(
                     collect($permissions)
+                        /** @phpstan-ignore-next-line */
                         ->filter(fn ($value, $key) => $record->checkPermissionTo($key))
                         ->keys()
                         ->toArray()

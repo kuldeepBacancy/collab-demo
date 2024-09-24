@@ -9,8 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 
-class User extends Authenticatable implements HasName
+class User extends Authenticatable implements HasName, HasAvatar
 {
     use HasFactory;
     use Notifiable;
@@ -43,9 +45,8 @@ class User extends Authenticatable implements HasName
         return $this->firstname . ' ' . $this->lastname ?: 'Unknown User';
     }
 
-    public function getAvatarUrlAttribute(): string
+    public function getFilamentAvatarUrl(): ?string
     {
-        $user = auth()->user();
-        return asset('storage/admin/profile_photos/' . $user['avatar_url']);
+        return Storage::disk('profile')->url($this->attributes['avatar_url']);
     }
 }

@@ -2,10 +2,7 @@
 
 namespace App\Providers;
 
-use App\AvatarProviders\CustomAvatarProvider;
-use Filament\Facades\Filament;
 use Illuminate\Support\ServiceProvider;
-use Filament\AvatarProviders\Contracts\AvatarProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

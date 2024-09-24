@@ -54,10 +54,10 @@ class UserResource extends Resource
                 Select::make('roles')
                     ->relationship('roles', 'name')
                     ->required(),
-                FileUpload::make('avatar_url')
-                    ->image()
-                    ->acceptedFileTypes(['image/jpeg','image/png','image/jpg'])
-                    ->disk('profile'),
+                    FileUpload::make('avatar_url')
+                    ->image()   
+                    ->disk('profile')
+                    ->label('Avatar'),
             ]);
     }
 
@@ -70,7 +70,7 @@ class UserResource extends Resource
                 TextColumn::make('email'),
                 TextColumn::make('roles.name'),
                 TextColumn::make('phone_number'),
-                ImageColumn::make('avatar_url')->disk('profile'),
+                ImageColumn::make('avatar_url')->disk('profile')
             ])
             ->filters([
                 //
