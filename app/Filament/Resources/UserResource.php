@@ -50,14 +50,16 @@ class UserResource extends Resource
                 TextInput::make('password')
                     ->password()
                     ->dehydrated(fn ($state) => filled($state))
-                    ->required(fn (string $context): bool => $context === 'create'),
+                    ->required(fn (string $context): bool => $context === 'create')
+                    ->autocomplete('new-password'),
                 Select::make('roles')
                     ->relationship('roles', 'name')
                     ->required(),
-                    FileUpload::make('avatar_url')
-                    ->image()   
+                FileUpload::make('avatar_url')
+                    ->image()
                     ->disk('profile')
                     ->label('Avatar'),
+                
             ]);
     }
 
