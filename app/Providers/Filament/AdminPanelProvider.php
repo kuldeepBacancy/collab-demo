@@ -29,6 +29,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->profile(EditProfile::class, isSimple: false)
+            ->unsavedChangesAlerts()
+            ->databaseTransactions()
             ->colors([
                 'primary' => Color::Amber,
             ])
