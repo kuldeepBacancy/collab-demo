@@ -62,11 +62,11 @@ Steps to run this project:
 ### Steps to run this project
 - Clone this project
 - Install composer using `composer install`
-- Run migrations and seeders using below command
+- Run migrations and seeders using command:
     `php artisan migrate --seed`
-- Install shield for roles and permissions using below command
+- Install shield for roles and permissions using command:
     `php artisan shield:install`
 - Run the project and go to `/admin`
-- Please use below credentials for starters:
+- Please use provided credentials for starters:
     Email: `super_admin@example.com`
     Password: `password`
