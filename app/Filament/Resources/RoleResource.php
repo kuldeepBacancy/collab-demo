@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\Shield;
+namespace App\Filament\Resources;
 
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use BezhanSalleh\FilamentShield\Facades\FilamentShield;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use BezhanSalleh\FilamentShield\Forms\ShieldSelectAllToggle;
-use App\Filament\Resources\Shield\RoleResource\Pages;
+use App\Filament\Resources\RoleResource\Pages;
 use BezhanSalleh\FilamentShield\Support\Utils;
 use Filament\Forms;
 use Filament\Forms\Components\Component;
@@ -17,13 +17,16 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
+use BezhanSalleh\FilamentShield\Resources\RoleResource as ShieldRoleResource;
 
-class RoleResource extends Resource implements HasShieldPermissions
+class RoleResource extends ShieldRoleResource implements HasShieldPermissions
 {
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $navigationGroup = 'Roles and Permissions';
+    protected static ?string $navigationGroup = 'Users';
 
+    protected static ?int $navigationSort = 2;
 
     public static function getPermissionPrefixes(): array
     {
@@ -92,17 +95,11 @@ class RoleResource extends Resource implements HasShieldPermissions
                     ->formatStateUsing(fn ($state): string => Str::headline($state))
                     ->colors(['primary'])
                     ->searchable(),
-                Tables\Columns\TextColumn::make('guard_name')
-                    ->badge()
-                    ->label(__('filament-shield::filament-shield.column.guard_name')),
                 Tables\Columns\TextColumn::make('permissions_count')
                     ->badge()
                     ->label(__('filament-shield::filament-shield.column.permissions'))
                     ->counts('permissions')
                     ->colors(['success']),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label(__('filament-shield::filament-shield.column.updated_at'))
-                    ->dateTime(),
             ])
             ->filters([
                 //
@@ -250,16 +247,13 @@ class RoleResource extends Resource implements HasShieldPermissions
 
     public static function setPermissionStateForRecordPermissions(Component $component, string $operation, array $permissions, ?Model $record): void
     {
-
         if (in_array($operation, ['edit', 'view'])) {
-
             if (blank($record)) {
                 return;
             }
             if ($component->isVisible() && count($permissions) > 0) {
                 $component->state(
                     collect($permissions)
-                        /** @phpstan-ignore-next-line */
                         ->filter(fn ($value, $key) => $record->checkPermissionTo($key))
                         ->keys()
                         ->toArray()

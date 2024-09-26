@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
+use Filament\Tables\Filters\SelectFilter;
 
 class UserResource extends Resource
 {
@@ -27,18 +28,17 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Roles and Permissions';
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationGroup = 'Users';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('firstname')
+                TextInput::make('name')
                     ->required()
-                    ->maxLength(50),
-                TextInput::make('lastname')
-                    ->required()
-                    ->maxLength(50),
+                    ->maxLength(100),
                 TextInput::make('email')
                     ->required()
                     ->maxLength(100)
@@ -46,20 +46,21 @@ class UserResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->readOnlyOn(['edit']),
                 TextInput::make('phone_number')
+                    ->required()
                     ->maxLength(20),
                 TextInput::make('password')
                     ->password()
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create')
                     ->autocomplete('new-password'),
-                Select::make('roles')
-                    ->relationship('roles', 'name')
-                    ->required(),
                 FileUpload::make('avatar_url')
                     ->image()
                     ->disk('profile')
-                    ->label('Avatar'),
-                
+                    ->label('Profile photo'),
+                Select::make('roles')
+                    ->relationship('roles', 'name')
+                    ->required(),
+
             ]);
     }
 
@@ -67,18 +68,22 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('firstname'),
-                TextColumn::make('lastname'),
-                TextColumn::make('email'),
+                ImageColumn::make('avatar_url')->disk('profile')->label('Profile Photo'),
+                TextColumn::make('name')->searchable(),
+                TextColumn::make('email')->searchable(),
+                TextColumn::make('phone_number')->searchable(),
                 TextColumn::make('roles.name'),
-                TextColumn::make('phone_number'),
-                ImageColumn::make('avatar_url')->disk('profile')
             ])
             ->filters([
-                //
+                SelectFilter::make('roles')
+                    ->relationship('roles', 'name')
+                    ->searchable()
+                    ->preload()
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn ($record) => auth()->id() !== $record->id)
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

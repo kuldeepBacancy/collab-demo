@@ -20,26 +20,24 @@ class EditProfile extends BaseEditProfile
             ->schema([
                 Grid::make(2)
                     ->schema([
-                        TextInput::make('firstname')
-                            ->label('First name')
+                        TextInput::make('name')
+                            ->label('Name')
                             ->required()
-                            ->maxLength(50),
-                        TextInput::make('lastname')
-                            ->label('Last name')
-                            ->required()
-                            ->maxLength(50),
-                        $this->getEmailFormComponent(),
+                            ->maxLength(100),
+                        $this->getEmailFormComponent()->readonly(),
                         TextInput::make('phone_number')
-                            ->maxLength(20),
+                            ->maxLength(20)
+                            ->required(),
+                        $this->getPasswordFormComponent(),
                         FileUpload::make('avatar_url')
                             ->image()
                             ->acceptedFileTypes(['image/jpeg','image/png','image/jpg'])
                             ->maxSize(10240)
                             ->disk('profile')
+                            ->label('Profile photo')
                             ->getUploadedFileNameForStorageUsing(function ($file) {
                                 return Uuid::uuid4()->toString() . '.' . $file->getClientOriginalExtension();
                             }),
-                        $this->getPasswordFormComponent(),
                     ])
             ]);
     }

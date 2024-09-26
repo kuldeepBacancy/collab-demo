@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\Shield\RoleResource\Pages;
+namespace App\Filament\Resources\RoleResource\Pages;
 
-use App\Filament\Resources\Shield\RoleResource;
+use App\Filament\Resources\RoleResource;
 use BezhanSalleh\FilamentShield\Support\Utils;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Arr;
@@ -32,7 +32,6 @@ class CreateRole extends CreateRecord
         $permissionModels = collect();
         $this->permissions->each(function ($permission) use ($permissionModels) {
             $permissionModels->push(Utils::getPermissionModel()::firstOrCreate([
-                /** @phpstan-ignore-next-line */
                 'name' => $permission,
                 'guard_name' => $this->data['guard_name'],
             ]));

@@ -19,8 +19,7 @@ class User extends Authenticatable implements HasName, HasAvatar
     use HasRoles;
 
     protected $fillable = [
-        'firstname',
-        'lastname',
+        'name',
         'email',
         'password',
         'avatar_url',
@@ -42,14 +41,11 @@ class User extends Authenticatable implements HasName, HasAvatar
 
     public function getFilamentName(): string
     {
-        return $this->firstname . ' ' . $this->lastname ?: 'Unknown User';
+        return $this->name ?: 'Unknown User';
     }
 
     public function getFilamentAvatarUrl(): ?string
     {
         return isset($this->attributes['avatar_url']) ? Storage::disk('profile')->url($this->attributes['avatar_url']) : null;
-        // $avatarUrl = Storage::disk('profile')->url($this->attributes['avatar_url']);
-    
-        // return $avatarUrl !== null ? $avatarUrl : null;
     }
 }

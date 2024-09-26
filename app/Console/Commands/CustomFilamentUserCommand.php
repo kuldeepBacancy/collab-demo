@@ -29,17 +29,17 @@ class CustomFilamentUserCommand extends Command
      */
     public function handle()
     {
-        $firstname = $this->ask('First Name');
-        $lastname = $this->ask('Last Name');
+        $name = $this->ask('Name');
         $email = $this->ask('Email');
         $password = $this->secret('Password');
+        $phone_number = $this->ask('Phone Number');
 
         $user = User::create([
-            'firstname' => $firstname,
-            'lastname' => $lastname,
+            'name' => $name,
+            'phone_number' => $phone_number,
             'email' => $email,
             'password' => Hash::make($password),
-            ]);
+        ]);
 
         $role = Role::firstOrCreate(['name' => 'Super Admin']);
         $permissions = Permission::all();
