@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Super Admin',
             'email' => 'super_admin@example.com',
             'password' => Hash::make('password'),
+            'phone_number' => '9999999999',
             'email_verified_at' => Carbon::now(),
             'created_at' => Carbon::now(),
         ]);
