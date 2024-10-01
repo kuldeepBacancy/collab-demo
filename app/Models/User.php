@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\HasName;
@@ -47,5 +48,11 @@ class User extends Authenticatable implements HasName, HasAvatar
     public function getFilamentAvatarUrl(): ?string
     {
         return isset($this->attributes['avatar_url']) ? Storage::disk('profile')->url($this->attributes['avatar_url']) : null;
+    }
+
+    /* Foreign Refs */
+    public function vehicles(): HasMany
+    {
+        return $this->hasMany(Vehicle::class);
     }
 }
