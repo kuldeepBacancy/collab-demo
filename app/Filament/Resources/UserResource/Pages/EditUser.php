@@ -9,6 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class EditUser extends EditRecord
 {
@@ -25,12 +26,12 @@ class EditUser extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $oldPath = $this->record->avatar_url;
+        $oldPath = $this->record->profile_photo_path;
         if (isset($data['password']) && $data['password']) {
             $this->password = $data['password'];
             $data['password'] = Hash::make($data['password']);
         }
-        if (isset($data['avatar_url']) && $data['avatar_url'] && $data['avatar_url']!=auth()->user()->avatar_url && $oldPath!=null) {
+        if (isset($data['profile_photo_path']) && $data['profile_photo_path'] && $data['profile_photo_path']!=Auth::user()->profile_photo_path && $oldPath!=null) {
             Storage::disk('profile')->delete($oldPath);
         }
         return $data;

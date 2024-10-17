@@ -18,8 +18,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password', length:100)->nullable();
             $table->string('phone_number', length:20)->nullable();
-            $table->string('avatar_url', length:150)->nullable();
             $table->index('phone_number');
+            $table->foreignId('current_team_id')->nullable();
+            $table->string('profile_photo_path', 2048)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

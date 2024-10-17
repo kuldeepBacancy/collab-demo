@@ -4,34 +4,64 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Filament\Models\Contracts\HasName;
-use Illuminate\Support\Facades\Storage;
-use Spatie\Permission\Traits\HasRoles;
-use Filament\Models\Contracts\FilamentUser;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Sanctum\HasApiTokens;
 use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasName;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class User extends Authenticatable implements HasName, HasAvatar
 {
+    use HasApiTokens;
     use HasFactory;
+    use HasProfilePhoto;
     use Notifiable;
+    use TwoFactorAuthenticatable;
     use HasRoles;
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'avatar_url',
-        'phone_number'
+        'phone_number',
+        'profile_photo_path'
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_recovery_codes',
+        'two_factor_secret',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'profile_photo_url',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [
@@ -47,12 +77,26 @@ class User extends Authenticatable implements HasName, HasAvatar
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return isset($this->attributes['avatar_url']) ? Storage::disk('profile')->url($this->attributes['avatar_url']) : null;
+        return isset($this->attributes['profile_photo_path']) ? Storage::disk('profile')->url($this->attributes['profile_photo_path']) : null;
     }
 
-    /* Foreign Refs */
-    public function vehicles(): HasMany
+    public function updateProfilePhoto(UploadedFile $photo)
     {
-        return $this->hasMany(Vehicle::class);
+        $disk = $this->profilePhotoDisk();
+
+        tap($this->profile_photo_path, function ($previous) use ($photo, $disk) {
+            $this->forceFill([
+                'profile_photo_path' => $photo->storePublicly('', ['disk' => $disk]),
+            ])->save();
+
+            if ($previous) {
+                Storage::disk($disk)->delete($previous);
+            }
+        });
+    }
+
+    protected function profilePhotoDisk()
+    {
+        return isset($_ENV['VAPOR_ARTIFACT_NAME']) ? $_ENV['VAPOR_ARTIFACT_NAME'] : config('jetstream.profile_photo_disk', 'public');
     }
 }

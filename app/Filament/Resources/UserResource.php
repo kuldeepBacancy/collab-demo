@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
@@ -53,7 +54,7 @@ class UserResource extends Resource
                     ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create')
                     ->autocomplete('new-password'),
-                FileUpload::make('avatar_url')
+                FileUpload::make('profile_photo_path')
                     ->image()
                     ->disk('profile')
                     ->label('Profile photo'),
@@ -68,7 +69,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('avatar_url')->disk('profile')->label('Profile Photo'),
+                ImageColumn::make('profile_photo_path')->disk('profile')->label('Profile Photo'),
                 TextColumn::make('name')->searchable(),
                 TextColumn::make('email')->searchable(),
                 TextColumn::make('phone_number')->searchable(),
@@ -83,8 +84,8 @@ class UserResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
-                    ->visible(fn ($record) => auth()->id() !== $record->id)
-            ])
+                    ->visible(fn ($record) => Auth::user()->id !== $record->id)
+                ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

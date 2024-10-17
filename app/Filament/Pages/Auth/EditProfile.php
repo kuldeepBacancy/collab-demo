@@ -29,7 +29,7 @@ class EditProfile extends BaseEditProfile
                             ->maxLength(20)
                             ->required(),
                         $this->getPasswordFormComponent(),
-                        FileUpload::make('avatar_url')
+                        FileUpload::make('profile_photo_path')
                             ->image()
                             ->acceptedFileTypes(['image/jpeg','image/png','image/jpg'])
                             ->maxSize(10240)
