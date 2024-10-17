@@ -2,17 +2,18 @@
 
 namespace App\Providers\Filament;
 
-use Filament\Support\Enums\MaxWidth;
+use App\Filament\Pages\Auth\EditProfile;
+use App\Filament\Pages\Dashboard;
 use App\Filament\Resources\Admin\CompanyResource\Widgets\CompanyCountWidget;
 use App\Filament\Resources\Admin\VehicleModelResource\Widgets\VehicleModelWidget;
 use App\Filament\Resources\Admin\VehicleResource\Widgets\VehicleCountWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -21,8 +22,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Filament\Pages\Auth\EditProfile;
-use App\Filament\Pages\Dashboard;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -67,7 +66,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
             ])
             ->maxContentWidth(MaxWidth::class)
             ->spa();

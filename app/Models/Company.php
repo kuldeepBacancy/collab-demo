@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use App\Enums\Common\Status;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Company extends Model
 {
@@ -44,7 +44,6 @@ class Company extends Model
         'status' => Status::class,
     ];
 
-
     /* Foreign Refs */
     public function vehicleModels(): HasMany
     {
@@ -55,7 +54,6 @@ class Company extends Model
     {
         return $this->hasMany(Vehicle::class);
     }
-
 
     /* Scopes */
     public function scopeStatus($query, $where)

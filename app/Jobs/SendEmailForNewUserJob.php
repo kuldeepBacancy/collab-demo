@@ -18,7 +18,9 @@ class SendEmailForNewUserJob implements ShouldQueue
     use SerializesModels;
 
     protected $name;
+
     protected $password;
+
     protected $email;
 
     /**

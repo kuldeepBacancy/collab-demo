@@ -10,7 +10,7 @@ class CompanyCountWidget extends Widget
 {
     protected static string $view = 'filament.resources.admin.company-resource.widgets.company-count-widget';
 
-    protected int | string | array $columnSpan = 1;
+    protected int|string|array $columnSpan = 1;
 
     protected static ?int $pollingInterval = 30;
 

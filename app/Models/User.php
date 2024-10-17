@@ -3,26 +3,27 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use Filament\Models\Contracts\HasAvatar;
-use Filament\Models\Contracts\HasName;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
 
-class User extends Authenticatable implements HasName, HasAvatar
+class User extends Authenticatable implements HasAvatar, HasName
 {
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
+    use HasRoles;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use HasRoles;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -33,7 +34,7 @@ class User extends Authenticatable implements HasName, HasAvatar
         'email',
         'password',
         'phone_number',
-        'profile_photo_path'
+        'profile_photo_path',
     ];
 
     /**

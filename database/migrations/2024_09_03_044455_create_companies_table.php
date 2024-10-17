@@ -2,11 +2,11 @@
 
 use App\Enums\Common\Status;
 use App\Enums\Vehicle\VehicleType;
-use PHPUnit\Logging\Exception;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use PHPUnit\Logging\Exception;
 
 return new class extends Migration
 {
@@ -16,19 +16,19 @@ return new class extends Migration
     public function up(): void
     {
         try {
-            if (!Schema::hasTable('companies')) {
+            if (! Schema::hasTable('companies')) {
                 Schema::create('companies', function (Blueprint $table) {
                     $table->id();
 
                     $table->string('company_name', 100)->unique()->nullable()->index();
-                    $table->boolean('status')->default(Status::Active->value)->comment(Status::Inactive->value . ' => Inactive, ' . Status::Active->value . ' => Active');
+                    $table->boolean('status')->default(Status::Active->value)->comment(Status::Inactive->value.' => Inactive, '.Status::Active->value.' => Active');
 
                     $table->softDeletes();
                     $table->timestamps();
                 });
             }
 
-            if (!Schema::hasTable('vehicle_models')) {
+            if (! Schema::hasTable('vehicle_models')) {
                 Schema::create('vehicle_models', function (Blueprint $table) {
                     $table->id();
 
@@ -36,14 +36,14 @@ return new class extends Migration
                     $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
 
                     $table->string('model_name', 100)->unique()->nullable()->index();
-                    $table->boolean('status')->default(Status::Active->value)->comment(Status::Inactive->value . ' => Inactive, ' . Status::Active->value . ' => Active');
+                    $table->boolean('status')->default(Status::Active->value)->comment(Status::Inactive->value.' => Inactive, '.Status::Active->value.' => Active');
 
                     $table->softDeletes();
                     $table->timestamps();
                 });
             }
 
-            if (!Schema::hasTable('vehicles')) {
+            if (! Schema::hasTable('vehicles')) {
                 Schema::create('vehicles', function (Blueprint $table) {
                     $table->id();
 
@@ -56,16 +56,16 @@ return new class extends Migration
                     $table->unsignedBigInteger('vehicle_model_id')->nullable();
                     $table->foreign('vehicle_model_id')->references('id')->on('vehicle_models')->onDelete('cascade');
 
-                    $table->boolean('vehicle_type')->default(VehicleType::Scooter->value)->comment(VehicleType::Scooter->value . ' => Scooter, ' . VehicleType::Car->value . ' => Car');
+                    $table->boolean('vehicle_type')->default(VehicleType::Scooter->value)->comment(VehicleType::Scooter->value.' => Scooter, '.VehicleType::Car->value.' => Car');
                     $table->string('vehicle_number', 20)->unique()->nullable()->index();
-                    $table->boolean('status')->default(Status::Active->value)->comment(Status::Inactive->value . ' => Inactive, ' . Status::Active->value . ' => Active');
+                    $table->boolean('status')->default(Status::Active->value)->comment(Status::Inactive->value.' => Inactive, '.Status::Active->value.' => Active');
 
                     $table->softDeletes();
                     $table->timestamps();
                 });
             }
         } catch (Exception $e) {
-            echo "Something went wrong, check logs";
+            echo 'Something went wrong, check logs';
             Log::channel('migrationlogs')->error($e);
         }
     }
@@ -80,7 +80,7 @@ return new class extends Migration
             Schema::dropIfExists('vehicle_models');
             Schema::dropIfExists('companies');
         } catch (Exception $e) {
-            echo "Something went wrong, check logs";
+            echo 'Something went wrong, check logs';
             Log::channel('migrationlogs')->error($e);
         }
     }

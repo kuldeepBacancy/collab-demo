@@ -20,7 +20,7 @@ class ListService
     {
         return TextColumn::make($column)
             ->badge()
-            ->formatStateUsing(fn(Status $state): string => $state->getLabel())
-            ->color(fn(Status $state): string => $state->getColor());
+            ->formatStateUsing(fn (Status $state): string => $state->getLabel())
+            ->color(fn (Status $state): string => $state->getColor());
     }
 }

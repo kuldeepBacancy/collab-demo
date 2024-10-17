@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Admin\VehicleResource\Pages;
 
 use App\Filament\Resources\Admin\VehicleResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateVehicle extends CreateRecord

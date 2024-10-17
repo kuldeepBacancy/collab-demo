@@ -6,10 +6,9 @@ use App\Filament\Resources\UserResource;
 use App\Jobs\SendEmailForPasswordChangeJob;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class EditUser extends EditRecord
 {
@@ -31,16 +30,17 @@ class EditUser extends EditRecord
             $this->password = $data['password'];
             $data['password'] = Hash::make($data['password']);
         }
-        if (isset($data['profile_photo_path']) && $data['profile_photo_path'] && $data['profile_photo_path']!=Auth::user()->profile_photo_path && $oldPath!=null) {
+        if (isset($data['profile_photo_path']) && $data['profile_photo_path'] && $data['profile_photo_path'] != Auth::user()->profile_photo_path && $oldPath != null) {
             Storage::disk('profile')->delete($oldPath);
         }
+
         return $data;
     }
 
     protected function afterSave(): void
     {
         if ($this->password) {
-            $name = $this->record->firstname . ' ' . $this->record->lastname;
+            $name = $this->record->firstname.' '.$this->record->lastname;
             $email = $this->record->email;
             $password = $this->password;
 

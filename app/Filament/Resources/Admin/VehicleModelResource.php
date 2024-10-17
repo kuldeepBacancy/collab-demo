@@ -2,21 +2,17 @@
 
 namespace App\Filament\Resources\Admin;
 
-use Filament\Forms;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
+use App\Filament\Resources\Admin\VehicleModelResource\Pages;
 use App\Models\VehicleModel;
-use Filament\Resources\Resource;
-use App\Services\Datatables\ListService;
-use Illuminate\Database\Eloquent\Builder;
-use App\Services\FormSchema\FormFieldService;
 use App\Services\Datatables\ListActionService;
 use App\Services\Datatables\ListFilterService;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Database\Eloquent\Factories\Relationship;
-use App\Filament\Resources\Admin\VehicleModelResource\Pages;
-use App\Filament\Resources\Admin\VehicleModelResource\RelationManagers;
+use App\Services\Datatables\ListService;
+use App\Services\FormSchema\FormFieldService;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
 
 class VehicleModelResource extends Resource
 {

@@ -4,10 +4,10 @@ namespace App\Models;
 
 use App\Enums\Common\Status;
 use App\Enums\Vehicle\VehicleType;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vehicle extends Model
 {
@@ -50,7 +50,6 @@ class Vehicle extends Model
         'vehicle_type' => VehicleType::class,
     ];
 
-
     /* Foreign Refs */
     public function user(): BelongsTo
     {
@@ -66,7 +65,6 @@ class Vehicle extends Model
     {
         return $this->belongsTo(VehicleModel::class)->status(Status::Active->value);
     }
-
 
     /* Scopes */
     public function scopeStatus($query, $where)

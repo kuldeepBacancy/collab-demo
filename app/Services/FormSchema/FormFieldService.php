@@ -2,15 +2,13 @@
 
 namespace App\Services\FormSchema;
 
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use App\Enums\Common\Status;
-use App\Models\VehicleModel;
-use Illuminate\Validation\Rule;
 use App\Enums\Vehicle\VehicleType;
+use App\Models\VehicleModel;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 
 class FormFieldService
 {
@@ -31,7 +29,7 @@ class FormFieldService
             ->label($label);
 
         if ($maxLength != 0) {
-            $textField->maxLength($maxLength)->rule(['max: ' . $maxLength]);
+            $textField->maxLength($maxLength)->rule(['max: '.$maxLength]);
         }
 
         if ($unique) {
@@ -69,7 +67,7 @@ class FormFieldService
 
         if ($dependentField) {
             $selectField->live()
-                ->afterStateUpdated(fn(Set $set) => $set('vehicle_model_id', null));
+                ->afterStateUpdated(fn (Set $set) => $set('vehicle_model_id', null));
         }
 
         if ($required) {
@@ -79,6 +77,7 @@ class FormFieldService
         if ($multiple) {
             $selectField->multiple();
         }
+
         return $selectField;
     }
 
@@ -90,16 +89,17 @@ class FormFieldService
             ->relationship(name: 'vehicleModel', titleAttribute: 'model_name')
             ->options(function (Get $get) use ($multiple) {
                 $vehicleModelList = VehicleModel::query()->status(Status::Active->value);
-                if (!empty($get('company_id'))) {
+                if (! empty($get('company_id'))) {
                     if ($multiple) {
                         $vehicleModelList = $vehicleModelList->whereIn('company_id', $get('company_id'));
                     } else {
                         $vehicleModelList = $vehicleModelList->where('company_id', $get('company_id'));
                     }
                 }
+
                 return $vehicleModelList->pluck('model_name', 'id');
             })
-            ->disabled(fn(Get $get) => !$get('company_id'));
+            ->disabled(fn (Get $get) => ! $get('company_id'));
 
         if ($addOption) {
             $selectField->createOptionForm([
@@ -117,9 +117,9 @@ class FormFieldService
         if ($multiple) {
             $selectField->multiple();
         }
+
         return $selectField;
     }
-
 
     /* Vehicle type field */
     public static function getVehicleTypeField()

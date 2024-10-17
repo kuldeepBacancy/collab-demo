@@ -10,7 +10,7 @@ class VehicleModelWidget extends Widget
 {
     protected static string $view = 'filament.resources.admin.vehicle-model-resource.widgets.vehicle-model-widget';
 
-    protected int | string | array $columnSpan = 1;
+    protected int|string|array $columnSpan = 1;
 
     protected static ?int $pollingInterval = 30;
 

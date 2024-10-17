@@ -2,24 +2,22 @@
 
 namespace App\Filament\Resources\Admin;
 
-use Filament\Forms;
-use Filament\Tables;
+use App\Enums\Vehicle\VehicleType;
+use App\Filament\Resources\Admin\VehicleResource\Pages;
 use App\Models\Company;
 use App\Models\Vehicle;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Illuminate\Support\Arr;
 use App\Models\VehicleModel;
-use Filament\Resources\Resource;
-use App\Enums\Vehicle\VehicleType;
-use App\Services\Datatables\ListService;
-use Illuminate\Database\Eloquent\Builder;
-use App\Services\FormSchema\FormFieldService;
 use App\Services\Datatables\ListActionService;
 use App\Services\Datatables\ListFilterService;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\Admin\VehicleResource\Pages;
-use App\Filament\Resources\Admin\VehicleResource\RelationManagers;
+use App\Services\Datatables\ListService;
+use App\Services\FormSchema\FormFieldService;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 
 class VehicleResource extends Resource
 {
@@ -63,7 +61,7 @@ class VehicleResource extends Resource
                 ListService::getCommonTextColumn('vehicleModel.model_name', 'Vehicle Model'),
                 Tables\Columns\TextColumn::make('vehicle_type')
                     ->label('Vehicle Type')
-                    ->formatStateUsing(fn(VehicleType $state): string => $state->getLabel())
+                    ->formatStateUsing(fn (VehicleType $state): string => $state->getLabel())
                     ->searchable(),
                 ListService::getCommonTextColumn('vehicle_number', 'Vehicle Number'),
                 ListService::getStatusDisplay('status'),
@@ -88,26 +86,26 @@ class VehicleResource extends Resource
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->when(
                             Arr::get($data, 'company_id'),
-                            fn(Builder $query, $company_id): Builder => $query->whereIn('company_id', $company_id)
+                            fn (Builder $query, $company_id): Builder => $query->whereIn('company_id', $company_id)
                         )
                             ->when(
                                 Arr::get($data, 'vehicle_model_id'),
-                                fn(Builder $query, $vehicle_model_id): Builder => $query->whereIn('vehicle_model_id', $vehicle_model_id)
+                                fn (Builder $query, $vehicle_model_id): Builder => $query->whereIn('vehicle_model_id', $vehicle_model_id)
                             );
                     })
                     ->indicateUsing(function (array $data): ?string {
-                        if (!Arr::hasNotNull($data, 'company_id') && !Arr::hasNotNull($data, 'vehicle_model_id')) {
+                        if (! Arr::hasNotNull($data, 'company_id') && ! Arr::hasNotNull($data, 'vehicle_model_id')) {
                             return null;
                         } else {
-                            $returnValue = "";
+                            $returnValue = '';
                             if (Arr::hasNotNull($data, 'company_id')) {
                                 $companyList = Company::whereIn('id', Arr::get($data, 'company_id'))->pluck('company_name')->toArray();
-                                $returnValue .= "Company: " . implode(", ", $companyList);
+                                $returnValue .= 'Company: '.implode(', ', $companyList);
                             }
 
                             if (Arr::hasNotNull($data, 'vehicle_model_id')) {
                                 $vehicleModelList = VehicleModel::whereIn('id', Arr::get($data, 'company_id'))->pluck('model_name')->toArray();
-                                $returnValue .= " --- Vehicle Model: " . implode(", ", $vehicleModelList);
+                                $returnValue .= ' --- Vehicle Model: '.implode(', ', $vehicleModelList);
                             }
 
                             return $returnValue;

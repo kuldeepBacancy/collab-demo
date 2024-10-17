@@ -2,11 +2,8 @@
 
 namespace App\Filament\Pages\Auth;
 
-use Doctrine\DBAL\Schema\Schema;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\EditProfile as BaseEditProfile;
@@ -31,14 +28,14 @@ class EditProfile extends BaseEditProfile
                         $this->getPasswordFormComponent(),
                         FileUpload::make('profile_photo_path')
                             ->image()
-                            ->acceptedFileTypes(['image/jpeg','image/png','image/jpg'])
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg'])
                             ->maxSize(10240)
                             ->disk('profile')
                             ->label('Profile photo')
                             ->getUploadedFileNameForStorageUsing(function ($file) {
-                                return Uuid::uuid4()->toString() . '.' . $file->getClientOriginalExtension();
+                                return Uuid::uuid4()->toString().'.'.$file->getClientOriginalExtension();
                             }),
-                    ])
+                    ]),
             ]);
     }
 }

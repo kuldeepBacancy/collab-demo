@@ -2,23 +2,17 @@
 
 namespace App\Filament\Resources\Admin;
 
-use App\Enums\Common\Status;
-use Filament\Forms;
-use Filament\Tables;
+use App\Filament\Resources\Admin\CompanyResource\Pages;
 use App\Models\Company;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use App\Services\Datatables\ListService;
-use Illuminate\Database\Eloquent\Builder;
-use App\Services\FormSchema\FormFieldService;
 use App\Services\Datatables\ListActionService;
 use App\Services\Datatables\ListFilterService;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\Admin\CompanyResource\Pages;
-use App\Filament\Resources\Admin\CompanyResource\RelationManagers;
-use Filament\Notifications\Notification;
-use Filament\Tables\Columns\ToggleColumn;
+use App\Services\Datatables\ListService;
+use App\Services\FormSchema\FormFieldService;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
 
 class CompanyResource extends Resource
 {
