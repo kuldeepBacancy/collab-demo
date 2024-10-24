@@ -47,4 +47,9 @@ class EditUser extends EditRecord
             SendEmailForPasswordChangeJob::dispatch($name, $email, $password);
         }
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

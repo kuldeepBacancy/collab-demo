@@ -26,9 +26,15 @@ class DatabaseSeeder extends Seeder
             'created_at' => Carbon::now(),
         ]);
 
-        $role = Role::firstOrCreate(['name' => 'Super Admin']);
-        $permissions = Permission::all();
-        $role->syncPermissions($permissions);
+        $roleSeeder = new RoleSeeder();
+        $role = $roleSeeder->run();
         $user->assignRole($role->name);
+
+        $this->call([
+            CompanySeeder::class,
+            VehicleModelSeeder::class,
+            VehicleSeeder::class,
+            SpotSeeder::class
+        ]);
     }
 }

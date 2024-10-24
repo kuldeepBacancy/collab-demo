@@ -71,6 +71,10 @@ class User extends Authenticatable implements HasAvatar, HasName
         ];
     }
 
+    public function spots(){
+        return $this->belongsToMany(Spot::class);
+    }
+
     public function getFilamentName(): string
     {
         return $this->name ?: 'Unknown User';

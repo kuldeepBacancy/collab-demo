@@ -29,4 +29,9 @@ class CreateUser extends CreateRecord
 
         SendEmailForNewUserJob::dispatch($name, $email, $password);
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

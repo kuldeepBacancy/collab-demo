@@ -3,16 +3,15 @@
 namespace App\Models;
 
 use App\Enums\Common\Status;
+use App\Enums\Vehicle\VehicleType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class VehicleModel extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     /**
      * The database table that should be used by the model.
@@ -29,6 +28,7 @@ class VehicleModel extends Model
     protected $fillable = [
         'company_id',
         'model_name',
+        'vehicle_type',
         'status',
     ];
 
@@ -44,6 +44,7 @@ class VehicleModel extends Model
 
     protected $casts = [
         'status' => Status::class,
+        'vehicle_type' => VehicleType::class,
     ];
 
     /* Foreign Refs */

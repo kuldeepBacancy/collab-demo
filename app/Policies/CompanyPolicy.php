@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\Company;
 use App\Models\User;
+use App\Models\Company;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CompanyPolicy
@@ -15,7 +15,7 @@ class CompanyPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_admin::company');
+        return $user->can('view_any_company');
     }
 
     /**
@@ -23,7 +23,7 @@ class CompanyPolicy
      */
     public function view(User $user, Company $company): bool
     {
-        return $user->can('view_admin::company');
+        return $user->can('view_company');
     }
 
     /**
@@ -31,7 +31,7 @@ class CompanyPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_admin::company');
+        return $user->can('create_company');
     }
 
     /**
@@ -39,7 +39,7 @@ class CompanyPolicy
      */
     public function update(User $user, Company $company): bool
     {
-        return $user->can('update_admin::company');
+        return $user->can('update_company');
     }
 
     /**
@@ -47,7 +47,7 @@ class CompanyPolicy
      */
     public function delete(User $user, Company $company): bool
     {
-        return $user->can('delete_admin::company');
+        return $user->can('delete_company');
     }
 
     /**
@@ -55,7 +55,7 @@ class CompanyPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_admin::company');
+        return $user->can('delete_any_company');
     }
 
     /**
@@ -63,7 +63,7 @@ class CompanyPolicy
      */
     public function forceDelete(User $user, Company $company): bool
     {
-        return $user->can('force_delete_admin::company');
+        return $user->can('force_delete_company');
     }
 
     /**
@@ -71,7 +71,7 @@ class CompanyPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_admin::company');
+        return $user->can('force_delete_any_company');
     }
 
     /**
@@ -79,7 +79,7 @@ class CompanyPolicy
      */
     public function restore(User $user, Company $company): bool
     {
-        return $user->can('restore_admin::company');
+        return $user->can('restore_company');
     }
 
     /**
@@ -87,7 +87,7 @@ class CompanyPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_admin::company');
+        return $user->can('restore_any_company');
     }
 
     /**
@@ -95,7 +95,7 @@ class CompanyPolicy
      */
     public function replicate(User $user, Company $company): bool
     {
-        return $user->can('replicate_admin::company');
+        return $user->can('replicate_company');
     }
 
     /**
@@ -103,6 +103,6 @@ class CompanyPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_admin::company');
+        return $user->can('reorder_company');
     }
 }

@@ -126,6 +126,7 @@ class FormFieldService
     {
         return Select::make('vehicle_type')
             ->label('Vehicle Type')
+            ->required()
             ->hint('Scooter contains "Bike" as well')
             ->hintIcon('heroicon-m-information-circle')
             ->options(VehicleType::class)

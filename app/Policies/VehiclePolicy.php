@@ -15,7 +15,7 @@ class VehiclePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_admin::vehicle');
+        return $user->can('view_any_vehicle');
     }
 
     /**
@@ -23,7 +23,7 @@ class VehiclePolicy
      */
     public function view(User $user, Vehicle $vehicle): bool
     {
-        return $user->can('view_admin::vehicle');
+        return $user->can('view_vehicle');
     }
 
     /**
@@ -31,7 +31,7 @@ class VehiclePolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_admin::vehicle');
+        return $user->can('create_vehicle');
     }
 
     /**
@@ -39,7 +39,7 @@ class VehiclePolicy
      */
     public function update(User $user, Vehicle $vehicle): bool
     {
-        return $user->can('update_admin::vehicle');
+        return $user->can('update_vehicle');
     }
 
     /**
@@ -47,7 +47,7 @@ class VehiclePolicy
      */
     public function delete(User $user, Vehicle $vehicle): bool
     {
-        return $user->can('delete_admin::vehicle');
+        return $user->can('delete_vehicle');
     }
 
     /**
@@ -55,7 +55,7 @@ class VehiclePolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_admin::vehicle');
+        return $user->can('delete_any_vehicle');
     }
 
     /**
@@ -63,7 +63,7 @@ class VehiclePolicy
      */
     public function forceDelete(User $user, Vehicle $vehicle): bool
     {
-        return $user->can('force_delete_admin::vehicle');
+        return $user->can('force_delete_vehicle');
     }
 
     /**
@@ -71,7 +71,7 @@ class VehiclePolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_admin::vehicle');
+        return $user->can('force_delete_any_vehicle');
     }
 
     /**
@@ -79,7 +79,7 @@ class VehiclePolicy
      */
     public function restore(User $user, Vehicle $vehicle): bool
     {
-        return $user->can('restore_admin::vehicle');
+        return $user->can('restore_vehicle');
     }
 
     /**
@@ -87,7 +87,7 @@ class VehiclePolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_admin::vehicle');
+        return $user->can('restore_any_vehicle');
     }
 
     /**
@@ -95,7 +95,7 @@ class VehiclePolicy
      */
     public function replicate(User $user, Vehicle $vehicle): bool
     {
-        return $user->can('replicate_admin::vehicle');
+        return $user->can('replicate_vehicle');
     }
 
     /**
@@ -103,6 +103,6 @@ class VehiclePolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_admin::vehicle');
+        return $user->can('reorder_vehicle');
     }
 }

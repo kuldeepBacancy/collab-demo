@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use App\Services\Datatables\ListActionService;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -75,8 +76,8 @@ class UserResource extends Resource
                     ->preload(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                ListActionService::getEditAction(),
+                ListActionService::getDeleteAction()
                     ->visible(fn ($record) => Auth::user()->id !== $record->id),
             ])
             ->bulkActions([

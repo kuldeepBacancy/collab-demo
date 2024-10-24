@@ -11,10 +11,11 @@ class RoleSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run()
     {
         $role = Role::firstOrCreate(['name' => 'Super Admin']);
         $permissions = Permission::all();
         $role->syncPermissions($permissions);
+        return $role;
     }
 }

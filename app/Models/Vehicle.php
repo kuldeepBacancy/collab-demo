@@ -7,12 +7,10 @@ use App\Enums\Vehicle\VehicleType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vehicle extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     /**
      * The database table that should be used by the model.
@@ -31,7 +29,6 @@ class Vehicle extends Model
         'company_id',
         'vehicle_model_id',
         'vehicle_number',
-        'vehicle_type',
         'status',
     ];
 
@@ -47,7 +44,6 @@ class Vehicle extends Model
 
     protected $casts = [
         'status' => Status::class,
-        'vehicle_type' => VehicleType::class,
     ];
 
     /* Foreign Refs */
