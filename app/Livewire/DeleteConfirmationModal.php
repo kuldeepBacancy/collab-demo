@@ -22,7 +22,6 @@ class DeleteConfirmationModal extends Component
         $this->modalHeading = $data['heading'];
         $this->modalBody = $data['body'];
         $this->showModal = true;
-        // dd('jere');
     }
 
     public function closeModal()

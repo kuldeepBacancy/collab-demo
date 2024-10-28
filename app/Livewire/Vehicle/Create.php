@@ -18,7 +18,7 @@ class Create extends Component
     #[Rule('required')]
     public $vehicle_model = '';
 
-    #[Rule('required|min:3|regex:/^[A-Z]{2}[ -]?[0-9]{2}[ -]?[A-Z]{1,2}[ -]?[0-9]{4}$/|unique:vehicles')]
+    #[Rule('required|regex:/^[A-Z]{2}[ -]?[0-9]{2}[ -]?[A-Z]{1,2}[ -]?[0-9]{4}$/|unique:vehicles')]
     public $vehicle_number = '';
 
     #[Rule('required_with:vehicle_number|same:vehicle_number')]
