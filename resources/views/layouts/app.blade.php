@@ -16,6 +16,15 @@
 
         <!-- Styles -->
         @livewireStyles
+        <style>
+            /* Additional styles */
+            ul { list-style: none; padding: 0; }
+            li { line-height: 2; clear: both; }
+            label { display: inline-block; width: 200px; }
+            li { font-family: Helvetica, Arial, sans-serif; font-size: 0.93rem; }
+            input { padding: 5px; }
+            input.masked { font-family: monospace; }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <x-banner />
@@ -41,5 +50,15 @@
         @stack('modals')
 
         @livewireScripts
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
+        <script>
+            $("#vehicle_number").mask("AA 99 AA 9999", {
+                translation: {
+                    'A': { pattern: /[A-Z]/, optional: false },
+                    '9': { pattern: /[0-9]/, optional: false }
+                }
+            });
+        </script>
     </body>
 </html>

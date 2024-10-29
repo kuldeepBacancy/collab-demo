@@ -14,6 +14,7 @@ use App\Services\FormSchema\FormFieldService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -44,7 +45,13 @@ class VehicleResource extends Resource
                     ->columnSpan(12),
                 Forms\Components\Grid::make()
                     ->schema([
-                        FormFieldService::getTextField('vehicle_number', 'Vehicle Number', 20, true, true)->regex("/^[A-Z]{2}[ -]?[0-9]{2}[ -]?[A-Z]{1,2}[ -]?[0-9]{4}$/"),
+                        FormFieldService::getTextField('vehicle_number', 'Vehicle Number', 20, true, true)->regex("/^[A-Z]{2}[ -]?[0-9]{2}[ -]?[A-Z]{1,2}[ -]?[0-9]{4}$/")
+                        ->mask(RawJs::make(<<<'JS'
+                            'aa 99 aa 9999'
+                        JS))
+                        ->extraInputAttributes([
+                            'oninput' => 'this.value = this.value.toUpperCase();'
+                        ]),
                         FormFieldService::getStatusField(),
                     ])
                     ->columnSpan(12),

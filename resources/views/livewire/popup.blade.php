@@ -9,6 +9,7 @@
                     <h6>Phone Number: {{ $data['user']['phone_number'] }}</h6>
                     <h6>Vehicle Number: {{ $data['vehicle_number'] }}</h6>
                 @endif
+                <br>
                 <div class="flex justify-center">
                     <button type="button" wire:click="closePopup" class="px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         Close
