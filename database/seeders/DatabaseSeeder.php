@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::factory()->create([
+        User::factory()->create([
             'name' => 'Super Admin',
             'email' => 'super_admin@example.com',
             'password' => Hash::make('password'),
@@ -26,9 +26,14 @@ class DatabaseSeeder extends Seeder
             'created_at' => Carbon::now(),
         ]);
 
-        $roleSeeder = new RoleSeeder();
-        $role = $roleSeeder->run();
-        $user->assignRole($role->name);
+        User::factory()->create([
+            'name' => 'User',
+            'email' => 'user@example.com',
+            'password' => Hash::make('password'),
+            'phone_number' => '9999999999',
+            'email_verified_at' => Carbon::now(),
+            'created_at' => Carbon::now(),
+        ]);
 
         $this->call([
             CompanySeeder::class,
