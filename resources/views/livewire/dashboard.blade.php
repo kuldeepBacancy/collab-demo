@@ -6,7 +6,7 @@
 
                 <!--   ✅ Here we can put font icon as well   -->
                 <div class="dropzone-drag-icon flex justify-center">
-                    <input wire:model="vehicle_image" accept="image/*" capture="user"
+                    <input wire:model="vehicle_image" accept="image/*"
                         class="absolute inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0 cursor-pointer dark:text-gray-400 focus:outline-none dark:placeholder-gray-400"
                         id="file_input" type="file">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
@@ -29,8 +29,17 @@
             @error('vehicle_image')
                 <span class="text-sm text-red-600">{{ $message }}</span>
             @enderror
-
-
+        </div>
+        <div class="w-full font-bold text-center py-6">
+            OR
+        </div>
+        <div class="flex justify-center">
+            <div class="flex flex-col justify-center align-center w-full">
+                <x-input name="vehicle_number" wire:model="vehicle_number" placeholder="Enter Vehicle-number"/>
+                @error('vehicle_number')
+                    <span class="text-sm text-red-600">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
         <div class="flex justify-center py-6">
             <button
